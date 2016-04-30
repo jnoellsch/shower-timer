@@ -31,7 +31,7 @@ namespace ShowerTimer.App
 
             this.Timer = new DispatcherTimer();
             this.Timer.Interval = new TimeSpan(0, 0, 1);
-            this.Timer.Tick += this.Timer_OnTick;
+            this.Timer.Tick += this.TimerOnTick;
 
             this.Playlist = new List<IActionSequence>()
                             {
@@ -48,7 +48,7 @@ namespace ShowerTimer.App
 
         public IActionSequence ActivePlaylist { get; private set; }
 
-        private void Timer_OnTick(object sender, object o)
+        private void TimerOnTick(object sender, object o)
         {
             TimeSpan currentTime = TimeSpan.Parse(this.Clock.Text);
 
@@ -56,10 +56,10 @@ namespace ShowerTimer.App
             var playlist = this.Playlist.FirstOrDefault(x => x.TargetPlayTime.Equals(currentTime));
             if (playlist != null)
             {
-                var item = this.Sounds.Items.Cast<ListBoxItem>().FirstOrDefault(x => (string)x.Content == playlist.SequenceName);
+                var item = this.SoundsList.Items.Cast<ListBoxItem>().FirstOrDefault(x => (string)x.Content == playlist.SequenceName);
                 if (item != null)
                 {
-                    this.Sounds.SelectedIndex = this.Sounds.Items.IndexOf(item);
+                    this.SoundsList.SelectedIndex = this.SoundsList.Items.IndexOf(item);
                 }
             }
 
@@ -73,20 +73,20 @@ namespace ShowerTimer.App
             this.Clock.Text = string.Format("{0:00}:{1:00}:{2:00}", newTime.Hours, newTime.Minutes, newTime.Seconds);
         }
 
-        private void Sounds_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SoundsListOnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // skip unselects?
-            if (this.Sounds.SelectedItem == null) return;
+            if (this.SoundsList.SelectedItem == null) return;
 
             // run selected
-            this.ActivePlaylist = this.Playlist.First(x => x.SequenceName == (string)((ListBoxItem)this.Sounds.SelectedItem)?.Content);
+            this.ActivePlaylist = this.Playlist.First(x => x.SequenceName == (string)((ListBoxItem)this.SoundsList.SelectedItem)?.Content);
             this.ActivePlaylist.Run();
             
             // update clock
             this.UpdateClock(this.ActivePlaylist.TargetPlayTime);
         }
 
-        private void StartPause_OnClick(object sender, RoutedEventArgs e)
+        private void StartPauseOnClick(object sender, RoutedEventArgs e)
         {
             switch ((string)this.StartPause.Content)
             {

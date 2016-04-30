@@ -14,7 +14,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Vertical" Grid.Column="0">
-            <ListBox x:Name="Sounds" SelectionMode="Single" SelectionChanged="Sounds_OnSelectionChanged">
+            <ListBox x:Name="SoundsList" SelectionMode="Single" SelectionChanged="SoundsListOnSelectionChanged">
                 <ListBoxItem>Shampoo</ListBoxItem>
                 <ListBoxItem>Conditioner</ListBoxItem>
                 <ListBoxItem>Body</ListBoxItem>
@@ -23,7 +23,7 @@
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical" Grid.Column="2">
             <TextBlock x:Name="Clock" Text="00:05:00" FontSize="48" Margin="5"></TextBlock>
-            <Button x:Name="StartPause" Click="StartPause_OnClick" Content="Start" Margin="5"></Button>
+            <Button x:Name="StartPause" Click="StartPauseOnClick" Content="Start" Margin="5"></Button>
         </StackPanel>
     </Grid>
 </Page>
