@@ -17,8 +17,11 @@
 
         private AudioComponent Audio => new AudioComponent(MediaSource.CreateFromUri(new Uri("ms-appx:///Cues/shampoo.mp3")));
 
+        private SpeechComponent Speech => new SpeechComponent();
+
         public void Run()
         {
+            //this.Speech.Speek("Put shampoo on your head.");
             this.Audio.Play();
         }
 
