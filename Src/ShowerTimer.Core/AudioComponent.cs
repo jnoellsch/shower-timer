@@ -1,6 +1,5 @@
-namespace ShowerTimer.App
+namespace ShowerTimer.Core
 {
-    using System;
     using Windows.Media.Core;
     using Windows.Media.Playback;
 
@@ -14,6 +13,7 @@ namespace ShowerTimer.App
             this.Player.AutoPlay = false;
             this.Player.Source = mediaSource;
         }
+
         public void Play()
         {
             this.Player.Play();

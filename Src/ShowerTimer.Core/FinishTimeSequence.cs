@@ -1,8 +1,7 @@
-﻿namespace ShowerTimer.App
+﻿namespace ShowerTimer.Core
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.Linq;
     using Windows.Media.Core;
 

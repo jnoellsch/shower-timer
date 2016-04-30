@@ -1,20 +1,21 @@
-﻿namespace ShowerTimer.App
+﻿namespace ShowerTimer.Core
 {
     using System;
     using Windows.Media.Core;
 
-    public class ConditionerTimeSequence : IActionSequence
+    public class ShampooTimeSequence : IActionSequence
     {
-        public ConditionerTimeSequence(TimeSpan targetPlayTime)
+
+        public ShampooTimeSequence(TimeSpan targetPlayTime)
         {
             this.TargetPlayTime = targetPlayTime;
         }
 
-        public string SequenceName => "Conditioner";
+        public string SequenceName => "Shampoo";
 
         public TimeSpan TargetPlayTime { get; }
 
-        private AudioComponent Audio => new AudioComponent(MediaSource.CreateFromUri(new Uri("ms-appx:///Cues/conditioner.mp3")));
+        private AudioComponent Audio => new AudioComponent(MediaSource.CreateFromUri(new Uri("ms-appx:///Cues/shampoo.mp3")));
 
         public void Run()
         {

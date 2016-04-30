@@ -1,4 +1,4 @@
-﻿namespace ShowerTimer.App
+﻿namespace ShowerTimer.Core
 {
     using System;
 
