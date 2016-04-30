@@ -5,6 +5,7 @@
 
     public class BodyTimeSequence : IActionSequence
     {
+
         public BodyTimeSequence(TimeSpan targetPlayTime)
         {
             this.TargetPlayTime = targetPlayTime;
@@ -14,9 +15,16 @@
 
         public TimeSpan TargetPlayTime { get; }
 
+        private AudioComponent Audio => new AudioComponent(MediaSource.CreateFromUri(new Uri("ms-appx:///Cues/body.mp3")));
+
         public void Run()
         {
-            new AudioComponent(MediaSource.CreateFromUri(new Uri("ms-appx:///Cues/body.mp3"))).Play();
+            this.Audio.Play();
+        }
+
+        public void Abort()
+        {
+            this.Audio.Pause();
         }
     }
 }

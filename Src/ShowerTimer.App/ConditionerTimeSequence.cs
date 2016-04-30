@@ -14,9 +14,16 @@
 
         public TimeSpan TargetPlayTime { get; }
 
+        private AudioComponent Audio => new AudioComponent(MediaSource.CreateFromUri(new Uri("ms-appx:///Cues/conditioner.mp3")));
+
         public void Run()
         {
-            new AudioComponent(MediaSource.CreateFromUri(new Uri("ms-appx:///Cues/conditioner.mp3"))).Play();
+            this.Audio.Play();
+        }
+
+        public void Abort()
+        {
+            this.Audio.Pause();
         }
     }
 }

@@ -7,16 +7,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-            <ListBox x:Name="Sounds" Width="200" SelectionMode="Single" SelectionChanged="Sounds_OnSelectionChanged">
+    <Grid Margin="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"></ColumnDefinition>
+            <ColumnDefinition Width="10"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Vertical" Grid.Column="0">
+            <ListBox x:Name="Sounds" SelectionMode="Single" SelectionChanged="Sounds_OnSelectionChanged">
                 <ListBoxItem>Shampoo</ListBoxItem>
                 <ListBoxItem>Conditioner</ListBoxItem>
                 <ListBoxItem>Body</ListBoxItem>
                 <ListBoxItem>Finish</ListBoxItem>
             </ListBox>
-            <TextBlock x:Name="Clock" Text="00:05:00"></TextBlock>
-            <Button x:Name="Start" Click="Start_OnClick" Content="Start"></Button>
+        </StackPanel>
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical" Grid.Column="2">
+            <TextBlock x:Name="Clock" Text="00:05:00" FontSize="48" Margin="5"></TextBlock>
+            <Button x:Name="StartPause" Click="StartPause_OnClick" Content="Start" Margin="5"></Button>
         </StackPanel>
     </Grid>
 </Page>

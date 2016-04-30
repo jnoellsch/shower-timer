@@ -25,19 +25,15 @@ namespace ShowerTimer.App
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private IList<IActionSequence> _actions;
-
-        private DispatcherTimer _timer;
-
         public MainPage()
         {
             this.InitializeComponent();
 
-            this._timer = new DispatcherTimer();
-            this._timer.Interval = new TimeSpan(0, 0, 1);
-            this._timer.Tick += this.Timer_OnTick;
+            this.Timer = new DispatcherTimer();
+            this.Timer.Interval = new TimeSpan(0, 0, 1);
+            this.Timer.Tick += this.Timer_OnTick;
 
-            this._actions = new List<IActionSequence>()
+            this.Playlist = new List<IActionSequence>()
                             {
                                 new ShampooTimeSequence(new TimeSpan(0, 0, 5, 0)),
                                 new ConditionerTimeSequence(new TimeSpan(0, 0, 4, 50)),
@@ -46,29 +42,64 @@ namespace ShowerTimer.App
                             };
         }
 
+        public IList<IActionSequence> Playlist { get; }
+
+        public DispatcherTimer Timer { get; }
+
+        public IActionSequence ActivePlaylist { get; private set; }
+
         private void Timer_OnTick(object sender, object o)
         {
             TimeSpan currentTime = TimeSpan.Parse(this.Clock.Text);
 
-            // match action, run if applicable
-            var toPlay = this._actions.FirstOrDefault(x => x.TargetPlayTime.Equals(currentTime));
-            toPlay?.Run();
+            // match action and select in list
+            var playlist = this.Playlist.FirstOrDefault(x => x.TargetPlayTime.Equals(currentTime));
+            if (playlist != null)
+            {
+                var item = this.Sounds.Items.Cast<ListBoxItem>().FirstOrDefault(x => (string)x.Content == playlist.SequenceName);
+                if (item != null)
+                {
+                    this.Sounds.SelectedIndex = this.Sounds.Items.IndexOf(item);
+                }
+            }
 
             // update clock
-            TimeSpan newTime = currentTime.Subtract(this._timer.Interval);
-            this.Clock.Text = string.Format("{0}:{1}:{2}", newTime.Hours, newTime.Minutes, newTime.Seconds);
+            TimeSpan newTime = currentTime.Subtract(this.Timer.Interval);
+            this.UpdateClock(newTime);
+        }
+
+        private void UpdateClock(TimeSpan newTime)
+        {
+            this.Clock.Text = string.Format("{0:00}:{1:00}:{2:00}", newTime.Hours, newTime.Minutes, newTime.Seconds);
         }
 
         private void Sounds_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // skip unselects?
+            if (this.Sounds.SelectedItem == null) return;
+
             // run selected
-            var toPlay = this._actions.First(x => x.SequenceName.Equals((string)e.AddedItems.Cast<ListBoxItem>().First().Content, StringComparison.OrdinalIgnoreCase));
-            toPlay.Run();
+            this.ActivePlaylist = this.Playlist.First(x => x.SequenceName == (string)((ListBoxItem)this.Sounds.SelectedItem)?.Content);
+            this.ActivePlaylist.Run();
+            
+            // update clock
+            this.UpdateClock(this.ActivePlaylist.TargetPlayTime);
         }
 
-        private void Start_OnClick(object sender, RoutedEventArgs e)
+        private void StartPause_OnClick(object sender, RoutedEventArgs e)
         {
-            this._timer.Start();
+            switch ((string)this.StartPause.Content)
+            {
+                case "Start":
+                    this.StartPause.Content = "Pause";
+                    this.Timer.Start();
+                    break;
+                case "Pause":
+                    this.StartPause.Content = "Start";
+                    this.Timer.Stop();
+                    this.ActivePlaylist.Abort();
+                    break;
+            }
         }
     }
 }

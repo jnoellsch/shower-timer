@@ -2,26 +2,26 @@ namespace ShowerTimer.App
 {
     using System;
     using Windows.Media.Core;
-    using Windows.UI.Xaml.Controls;
+    using Windows.Media.Playback;
 
     public class AudioComponent
     {
-        public MediaElement Media;
+        public MediaPlayer Player;
 
         public AudioComponent(MediaSource mediaSource)
         {
-            this.Media = new MediaElement();
-            this.Media.AutoPlay = false;
-            this.Media.SetPlaybackSource(mediaSource);
+            this.Player = BackgroundMediaPlayer.Current;
+            this.Player.AutoPlay = false;
+            this.Player.Source = mediaSource;
         }
         public void Play()
         {
-            this.Media.Play();
+            this.Player.Play();
         }
 
-        public void Stop()
+        public void Pause()
         {
-            this.Media.Stop();
+            this.Player.Pause();
         }
     }
 }
