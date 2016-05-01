@@ -109,7 +109,6 @@
   <ItemGroup>
     <Compile Include="AudioComponent.cs" />
     <Compile Include="BodyTimeSequence.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="ConditionerTimeSequence.cs" />
     <Compile Include="FinishTimeSequence.cs" />
     <Compile Include="IActionComponents.cs" />
