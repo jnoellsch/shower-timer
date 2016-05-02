@@ -10,10 +10,10 @@
         {
             this.Playlist = new List<IActionSequence>()
                             {
-                                new IntroTimeSequence(new TimeSpan(0, 0, 7, 0)),
-                                new ShampooTimeSequence(new TimeSpan(0, 0, 6, 0)),
-                                new ConditionerTimeSequence(new TimeSpan(0, 0, 4, 0)),
-                                new BodyTimeSequence(new TimeSpan(0, 0, 1, 30)),
+                                new IntroTimeSequence(new TimeSpan(0, 0, 5, 45)),
+                                new ShampooTimeSequence(new TimeSpan(0, 0, 4, 15)),
+                                new ConditionerTimeSequence(new TimeSpan(0, 0, 2, 15)),
+                                new BodyTimeSequence(new TimeSpan(0, 0, 0, 45)),
                                 new FinishTimeSequence(new TimeSpan(0, 0, 0, 0))
                             };
         }
