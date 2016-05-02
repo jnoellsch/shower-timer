@@ -14,12 +14,12 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Vertical" Grid.Column="0">
-            <ListBox x:Name="SoundsList" SelectionMode="Single" SelectionChanged="SoundsListOnSelectionChanged">
-                <ListBoxItem>Intro</ListBoxItem>
+            <ListBox x:Name="SequenceList" SelectionMode="Single" SelectionChanged="SequenceListOnSelectionChanged" DisplayMemberPath="SequenceName">
+                <!--<ListBoxItem>Intro</ListBoxItem>
                 <ListBoxItem>Shampoo</ListBoxItem>
                 <ListBoxItem>Conditioner</ListBoxItem>
                 <ListBoxItem>Body</ListBoxItem>
-                <ListBoxItem>Finish</ListBoxItem>
+                <ListBoxItem>Finish</ListBoxItem>-->
             </ListBox>
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical" Grid.Column="2">

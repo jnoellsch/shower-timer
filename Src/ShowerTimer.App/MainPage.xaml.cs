@@ -6,6 +6,7 @@
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using ShowerTimer.Core;
+    using ShowerTimer.Core.Extensions;
 
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
@@ -34,10 +35,10 @@
             var playlist = this.ActiveProfile.Playlist.FirstOrDefault(x => x.TargetPlayTime.Equals(currentTime));
             if (playlist != null)
             {
-                var item = this.SoundsList.Items.Cast<ListBoxItem>().FirstOrDefault(x => (string)x.Content == playlist.SequenceName);
+                var item = this.SequenceList.Items.Cast<IActionSequence>().FirstOrDefault(x => x.SequenceName == playlist.SequenceName);
                 if (item != null)
                 {
-                    this.SoundsList.SelectedIndex = this.SoundsList.Items.IndexOf(item);
+                    this.SequenceList.SelectedIndex = this.SequenceList.Items.IndexOf(item);
                 }
             }
 
@@ -48,16 +49,24 @@
 
         private void UpdateClock(TimeSpan newTime)
         {
+            // abort timer if we go negative 
+            if (newTime.IsNegative())
+            {
+                this.Timer.Stop();
+                return;
+            }
+
+            // refresh clock
             this.Clock.Text = string.Format("{0:00}:{1:00}:{2:00}", newTime.Hours, newTime.Minutes, newTime.Seconds);
         }
 
-        private void SoundsListOnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SequenceListOnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // skip unselects?
-            if (this.SoundsList.SelectedItem == null) return;
+            if (this.SequenceList.SelectedItem == null) return;
 
             // run selected
-            this.ActiveSequence = this.ActiveProfile.Playlist.First(x => x.SequenceName == (string)((ListBoxItem)this.SoundsList.SelectedItem)?.Content);
+            this.ActiveSequence = this.ActiveProfile.Playlist.First(x => x.SequenceName == ((IActionSequence)this.SequenceList.SelectedItem).SequenceName);
             this.ActiveSequence.Run();
 
             // update clock
@@ -95,10 +104,12 @@
                 case "Boy":
                     this.UpdateClock(boy.StartTime);
                     this.ActiveProfile = boy;
+                    this.SequenceList.ItemsSource = boy.Playlist;
                     break;
                 case "Girl":
                     this.UpdateClock(girl.StartTime);
                     this.ActiveProfile = girl;
+                    this.SequenceList.ItemsSource = girl.Playlist;
                     break;
             }
         }
