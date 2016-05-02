@@ -19,28 +19,19 @@
             this.Timer = new DispatcherTimer();
             this.Timer.Interval = new TimeSpan(0, 0, 1);
             this.Timer.Tick += this.TimerOnTick;
-
-            this.Playlist = new List<IActionSequence>()
-                            {
-                                new ShampooTimeSequence(new TimeSpan(0, 0, 5, 0)),
-                                new ConditionerTimeSequence(new TimeSpan(0, 0, 4, 50)),
-                                new BodyTimeSequence(new TimeSpan(0, 0, 4, 40)),
-                                new FinishTimeSequence(new TimeSpan(0, 0, 4, 30, 0)),
-                            };
         }
 
-        public IList<IActionSequence> Playlist { get; }
+        public IProfile ActiveProfile { get; private set; }
+        public IActionSequence ActiveSequence { get; private set; }
 
         public DispatcherTimer Timer { get; }
-
-        public IActionSequence ActivePlaylist { get; private set; }
 
         private void TimerOnTick(object sender, object o)
         {
             TimeSpan currentTime = TimeSpan.Parse(this.Clock.Text);
 
             // match action and select in list
-            var playlist = this.Playlist.FirstOrDefault(x => x.TargetPlayTime.Equals(currentTime));
+            var playlist = this.ActiveProfile.Playlist.FirstOrDefault(x => x.TargetPlayTime.Equals(currentTime));
             if (playlist != null)
             {
                 var item = this.SoundsList.Items.Cast<ListBoxItem>().FirstOrDefault(x => (string)x.Content == playlist.SequenceName);
@@ -66,11 +57,11 @@
             if (this.SoundsList.SelectedItem == null) return;
 
             // run selected
-            this.ActivePlaylist = this.Playlist.First(x => x.SequenceName == (string)((ListBoxItem)this.SoundsList.SelectedItem)?.Content);
-            this.ActivePlaylist.Run();
-            
+            this.ActiveSequence = this.ActiveProfile.Playlist.First(x => x.SequenceName == (string)((ListBoxItem)this.SoundsList.SelectedItem)?.Content);
+            this.ActiveSequence.Run();
+
             // update clock
-            this.UpdateClock(this.ActivePlaylist.TargetPlayTime);
+            this.UpdateClock(this.ActiveSequence.TargetPlayTime);
         }
 
         private void StartPauseOnClick(object sender, RoutedEventArgs e)
@@ -84,7 +75,30 @@
                 case "Pause":
                     this.StartPause.Content = "Start";
                     this.Timer.Stop();
-                    this.ActivePlaylist.Abort();
+                    break;
+            }
+        }
+
+        private void ProfileListOnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var boy = new BoyProfile();
+            var girl = new GirlProfile();
+
+            // pause current activity
+            this.StartPause.Content = "Start";
+            this.ActiveSequence?.Abort();
+            this.Timer.Stop();
+
+            // reset profiles, sequences
+            switch ((string)((ListBoxItem)this.ProfileList.SelectedItem)?.Content)
+            {
+                case "Boy":
+                    this.UpdateClock(boy.StartTime);
+                    this.ActiveProfile = boy;
+                    break;
+                case "Girl":
+                    this.UpdateClock(girl.StartTime);
+                    this.ActiveProfile = girl;
                     break;
             }
         }
