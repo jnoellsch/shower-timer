@@ -23,9 +23,9 @@
             </ListBox>
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical" Grid.Column="2">
-            <ListBox x:Name="ProfileList" SelectionMode="Single" HorizontalAlignment="Left" SelectionChanged="ProfileListOnSelectionChanged" Width="100">
-                <ListBoxItem>Boy</ListBoxItem>
-                <ListBoxItem>Girl</ListBoxItem>
+            <ListBox x:Name="ProfileList" SelectionMode="Single" HorizontalAlignment="Left" Width="100">
+                <ListBoxItem DoubleTapped="BoyListItemOnDoubleTapped">Boy</ListBoxItem>
+                <ListBoxItem DoubleTapped="GirlListeItemOnDoubleTapped">Girl</ListBoxItem>
             </ListBox>
             <TextBlock x:Name="Clock" Text="00:00:00" FontSize="48" Margin="5"></TextBlock>
             <Button x:Name="StartPause" Click="StartPauseOnClick" Content="Start" Margin="5"></Button>
