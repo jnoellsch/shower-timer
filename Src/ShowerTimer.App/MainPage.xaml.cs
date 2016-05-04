@@ -171,12 +171,12 @@
             this.Timer.Start();
         }
 
-        private void BoyListItemOnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        private void BoyListItemOnTapped(object sender, TappedRoutedEventArgs e)
         {
             this.SetBoyProfile();
         }
 
-        private void GirlListeItemOnDoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
+        private void GirlListItemOnTapped(object sender, TappedRoutedEventArgs e)
         {
             this.SetGirlProfile();
         }

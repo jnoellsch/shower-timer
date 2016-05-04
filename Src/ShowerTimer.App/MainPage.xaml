@@ -7,13 +7,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Margin="10" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"></ColumnDefinition>
             <ColumnDefinition Width="10"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Vertical" Grid.Column="0">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Top" Orientation="Vertical" Grid.Column="0" Margin="5">
             <ListBox x:Name="SequenceList" SelectionMode="Single" SelectionChanged="SequenceListOnSelectionChanged" DisplayMemberPath="SequenceName">
                 <!--<ListBoxItem>Intro</ListBoxItem>
                 <ListBoxItem>Shampoo</ListBoxItem>
@@ -23,12 +23,14 @@
             </ListBox>
         </StackPanel>
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Orientation="Vertical" Grid.Column="2">
-            <ListBox x:Name="ProfileList" SelectionMode="Single" HorizontalAlignment="Left" Width="100">
-                <ListBoxItem DoubleTapped="BoyListItemOnDoubleTapped">Boy</ListBoxItem>
-                <ListBoxItem DoubleTapped="GirlListeItemOnDoubleTapped">Girl</ListBoxItem>
-            </ListBox>
             <TextBlock x:Name="Clock" Text="00:00:00" FontSize="48" Margin="5"></TextBlock>
-            <Button x:Name="StartPause" Click="StartPauseOnClick" Content="Start" Margin="5"></Button>
+            <StackPanel HorizontalAlignment="Left" FlowDirection="LeftToRight" Orientation="Horizontal">
+                <ComboBox x:Name="ProfileList" HorizontalAlignment="Left" Width="100" Margin="5">
+                    <ComboBoxItem Tapped="BoyListItemOnTapped" Background="DodgerBlue" Foreground="White">Boy</ComboBoxItem>
+                    <ComboBoxItem Tapped="GirlListItemOnTapped" Background="DeepPink" Foreground="White">Girl</ComboBoxItem>
+                </ComboBox>
+                <Button x:Name="StartPause" Click="StartPauseOnClick" Content="Start" Margin="5"></Button>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>
