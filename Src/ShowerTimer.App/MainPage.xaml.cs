@@ -2,25 +2,93 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
+    using Windows.Devices.Gpio;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
     using ShowerTimer.Core;
     using ShowerTimer.Core.Extensions;
 
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
+        private const int GpioStartTimerPin = 19;
+        private const int GpioProfileSwapPin = 26;
+        private GpioPin _startTimerPin;
+        private GpioPin _profileSwapPin;
+
         public MainPage()
         {
             this.InitializeComponent();
+            this.InitializeGpio();
 
             this.Timer = new DispatcherTimer();
             this.Timer.Interval = new TimeSpan(0, 0, 1);
             this.Timer.Tick += this.TimerOnTick;
+
+            this.GpioWatcher = new DispatcherTimer();
+            this.GpioWatcher.Interval = TimeSpan.FromMilliseconds(500);
+            this.GpioWatcher.Tick += this.GpioWatcherOnTick;
+            this.GpioWatcher.Start();
+
+            this.Unloaded += this.MainPageUnloaded; 
         }
+
+        private void MainPageUnloaded(object sender, RoutedEventArgs e)
+        {
+            this._startTimerPin?.Dispose();
+            this._profileSwapPin?.Dispose();
+        }
+
+        private void InitializeGpio()
+        {
+            GpioController gpio = GpioController.GetDefault();
+            if (gpio == null) return; 
+
+            this._startTimerPin = gpio.OpenPin(GpioStartTimerPin);
+            this._startTimerPin.SetDriveMode(GpioPinDriveMode.Input);
+            this._startTimerPin.Write(GpioPinValue.Low);
+
+            this._profileSwapPin = gpio.OpenPin(GpioProfileSwapPin);
+            this._profileSwapPin.SetDriveMode(GpioPinDriveMode.Input);
+            this._profileSwapPin.Write(GpioPinValue.Low);
+        }
+
+        private void GpioWatcherOnTick(object sender, object e)
+        {
+            this.ProfileSwapPinReadExecute();
+            this.StartPinReadExecute();
+        }
+
+        private void StartPinReadExecute()
+        {
+            var pinVal = this._startTimerPin.Read();
+            if (pinVal == GpioPinValue.High)
+            {
+                Debug.WriteLine(this._startTimerPin + " = high. START IT!");
+                if (!this.Timer.IsEnabled)
+                {
+                    this.Timer.Start();
+                }
+            }
+        }
+
+        private void ProfileSwapPinReadExecute()
+        {
+            var pinVal = this._profileSwapPin.Read();
+            if (pinVal == GpioPinValue.High)
+            {
+                this.ProfileList.SelectedIndex = 0; // boy
+                Debug.WriteLine(this._profileSwapPin.PinNumber + " = high. BOY profile.");
+            }
+            else
+            {
+                this.ProfileList.SelectedIndex = 1; // girl
+                Debug.WriteLine(this._profileSwapPin.PinNumber + " = low. GIRL profile.");
+            }
+        }
+
+        public DispatcherTimer GpioWatcher { get; set; }
 
         public IProfile ActiveProfile { get; private set; }
         public IActionSequence ActiveSequence { get; private set; }
@@ -90,9 +158,6 @@
 
         private void ProfileListOnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var boy = new BoyProfile();
-            var girl = new GirlProfile();
-
             // pause current activity
             this.StartPause.Content = "Start";
             this.ActiveSequence?.Abort();
@@ -102,16 +167,31 @@
             switch ((string)((ListBoxItem)this.ProfileList.SelectedItem)?.Content)
             {
                 case "Boy":
-                    this.UpdateClock(boy.StartTime);
-                    this.ActiveProfile = boy;
-                    this.SequenceList.ItemsSource = boy.Playlist;
+                    this.SetBoyProfile();
                     break;
                 case "Girl":
-                    this.UpdateClock(girl.StartTime);
-                    this.ActiveProfile = girl;
-                    this.SequenceList.ItemsSource = girl.Playlist;
+                    this.SetGirlProfile();
                     break;
             }
+        }
+
+        private void SetProfile(IProfile profile)
+        {
+            this.ActiveProfile = profile;
+            this.UpdateClock(profile.StartTime);
+            this.SequenceList.ItemsSource = profile.Playlist;
+        }
+
+        private void SetBoyProfile()
+        {
+            this.SetProfile(new BoyProfile());
+            new SpeechComponent().Speek("Boy profile selected.");
+        }
+
+        private void SetGirlProfile()
+        {
+            this.SetProfile(new GirlProfile());
+            new SpeechComponent().Speek("Girl profile selected.");
         }
     }
 }
