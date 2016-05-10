@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowerTimer.App", "ShowerTimer.App.csproj", "{2C6C9C94-AEB6-45DA-978F-16EEFA6042F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowerTimer.App", "..\ShowerTimer.App\ShowerTimer.App.csproj", "{2C6C9C94-AEB6-45DA-978F-16EEFA6042F5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShowerTimer.Core", "..\ShowerTimer.Core\ShowerTimer.Core.csproj", "{3BF1702B-689D-467F-B65D-681FE31CBEB0}"
 EndProject
