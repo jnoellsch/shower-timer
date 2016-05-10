@@ -2,16 +2,13 @@
 {
     using System;
 
-    public class IntroTimeSequence : IActionSequence
+    public class IntroTimeSequence : SequenceBase, IActionSequence
     {
-        public IntroTimeSequence(TimeSpan targetPlayTime)
+        public IntroTimeSequence(TimeSpan targetPlayTime) : base(targetPlayTime)
         {
-            this.TargetPlayTime = targetPlayTime;
         }
 
         public string SequenceName => "Intro";
-
-        public TimeSpan TargetPlayTime { get; }
 
         private SpeechComponent Speech => new SpeechComponent();
 

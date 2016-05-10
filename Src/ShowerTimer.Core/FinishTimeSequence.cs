@@ -5,18 +5,16 @@
     using System.Linq;
     using Windows.Media.Core;
 
-    public class FinishTimeSequence : IActionSequence
+    public class FinishTimeSequence : SequenceBase, IActionSequence
     {
         private AudioComponent _audio;
 
         public FinishTimeSequence(TimeSpan targetPlayTime)
+            : base(targetPlayTime)
         {
-            this.TargetPlayTime = targetPlayTime;
         }
 
         public string SequenceName => "Finish";
-
-        public TimeSpan TargetPlayTime { get; }
 
         private List<MediaSource> MediaSources => new List<MediaSource>()
                                               {

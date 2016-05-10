@@ -113,11 +113,11 @@
     <Compile Include="ConditionerTimeSequence.cs" />
     <Compile Include="FinishTimeSequence.cs" />
     <Compile Include="GirlProfile.cs" />
-    <Compile Include="IActionComponents.cs" />
     <Compile Include="IActionSequence.cs" />
     <Compile Include="IntroTimeSequence.cs" />
     <Compile Include="IProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SequenceBase.cs" />
     <Compile Include="ShampooTimeSequence.cs" />
     <Compile Include="SpeechComponent.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
