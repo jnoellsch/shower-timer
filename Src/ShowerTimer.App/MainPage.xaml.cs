@@ -28,7 +28,7 @@
             this.Timer.Interval = new TimeSpan(0, 0, 1);
             this.Timer.Tick += this.TimerOnTick;
 
-            this.GpioWatcher.Interval = TimeSpan.FromMilliseconds(500);
+            this.GpioWatcher.Interval = TimeSpan.FromMilliseconds(250);
             this.GpioWatcher.Tick += this.GpioWatcherOnTick;
             this.GpioWatcher.Start();
 
@@ -56,11 +56,11 @@
             if (gpio == null) return;
 
             this._startTimerPin = gpio.OpenPin(GpioStartTimerPin);
-            this._startTimerPin.SetDriveMode(GpioPinDriveMode.Input);
+            this._startTimerPin.SetDriveMode(GpioPinDriveMode.InputPullDown);
             this._startTimerPin.Write(GpioPinValue.Low);
 
             this._profileSwapPin = gpio.OpenPin(GpioProfileSwapPin);
-            this._profileSwapPin.SetDriveMode(GpioPinDriveMode.Input);
+            this._profileSwapPin.SetDriveMode(GpioPinDriveMode.InputPullDown);
             this._profileSwapPin.Write(GpioPinValue.Low);
         }
 
