@@ -111,6 +111,8 @@
     <Compile Include="BodyTimeSequence.cs" />
     <Compile Include="BoyProfile.cs" />
     <Compile Include="ConditionerTimeSequence.cs" />
+    <Compile Include="EmptyProfile.cs" />
+    <Compile Include="EmptySequence.cs" />
     <Compile Include="FinishTimeSequence.cs" />
     <Compile Include="GirlProfile.cs" />
     <Compile Include="IActionSequence.cs" />

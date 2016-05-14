@@ -5,6 +5,8 @@
 
     public interface IProfile
     {
+        string ProfileName { get; }
+
         IList<IActionSequence> Playlist { get; }
 
         TimeSpan StartTime { get; }

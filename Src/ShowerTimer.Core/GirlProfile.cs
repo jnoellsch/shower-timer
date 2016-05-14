@@ -18,6 +18,8 @@
                             };
         }
 
+        public string ProfileName => "Girl";
+
         public IList<IActionSequence> Playlist { get; }
 
         public TimeSpan StartTime => this.Playlist.First().TargetPlayTime;

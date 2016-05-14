@@ -6,6 +6,8 @@
     using System.Linq;
     using Windows.Devices.Gpio;
     using Windows.UI.Xaml;
+    using Windows.UI.Xaml.Automation.Peers;
+    using Windows.UI.Xaml.Automation.Provider;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
     using ShowerTimer.Core;
@@ -23,11 +25,9 @@
             this.InitializeComponent();
             this.InitializeGpio();
 
-            this.Timer = new DispatcherTimer();
             this.Timer.Interval = new TimeSpan(0, 0, 1);
             this.Timer.Tick += this.TimerOnTick;
 
-            this.GpioWatcher = new DispatcherTimer();
             this.GpioWatcher.Interval = TimeSpan.FromMilliseconds(500);
             this.GpioWatcher.Tick += this.GpioWatcherOnTick;
             this.GpioWatcher.Start();
@@ -36,13 +36,13 @@
         }
 
 
-        public DispatcherTimer GpioWatcher { get; set; }
+        public DispatcherTimer GpioWatcher { get; set; } = new DispatcherTimer();
 
-        public IProfile ActiveProfile { get; private set; }
+        public IProfile ActiveProfile { get; private set; } = new EmptyProfile();
 
-        public IActionSequence ActiveSequence { get; private set; }
+        public IActionSequence ActiveSequence { get; private set; } = new EmptySequence();
 
-        public DispatcherTimer Timer { get; }
+        public DispatcherTimer Timer { get; } = new DispatcherTimer();
 
         private void MainPageUnloaded(object sender, RoutedEventArgs e)
         {
@@ -109,13 +109,12 @@
             var pinVal = this._profileSwapPin?.Read();
             if (pinVal == GpioPinValue.High)
             {
-                this.SetBoyProfile();
-                Debug.WriteLine(this._profileSwapPin?.PinNumber + " = high. BOY profile.");
+                this.SetNextProfile();
+                Debug.WriteLine(this._profileSwapPin?.PinNumber + " = high.");
             }
             else if (pinVal == GpioPinValue.Low)
             {
-                this.SetGirlProfile();
-                Debug.WriteLine(this._profileSwapPin?.PinNumber + " = low. GIRL profile.");
+                Debug.WriteLine(this._profileSwapPin?.PinNumber + " = low.");
             }
         }
 
@@ -190,6 +189,7 @@
             this.ActiveProfile = profile;
             this.UpdateClock(profile.StartTime);
             this.SequenceList.ItemsSource = profile.Playlist;
+            this.ProfileList.SelectedItem = this.ProfileList.Items.Cast<ComboBoxItem>().FirstOrDefault(x => (string)x.Content == profile.ProfileName);
         }
 
         private void SetBoyProfile()
@@ -200,8 +200,21 @@
 
         private void SetGirlProfile()
         {
+            this.ProfileList.SelectedIndex = 1;
             this.SetProfile(new GirlProfile());
             new SpeechComponent().Speek("Girl profile selected.");
+        }
+
+        private void SetNextProfile()
+        {
+            if (this.ActiveProfile.ProfileName.Equals("Boy"))
+            {
+                this.SetGirlProfile();
+            }
+            else
+            {
+                this.SetBoyProfile();
+            }
         }
     }
 }
