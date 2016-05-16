@@ -1,13 +1,10 @@
 ﻿namespace ShowerTimer.App
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using Windows.Devices.Gpio;
     using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Automation.Peers;
-    using Windows.UI.Xaml.Automation.Provider;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Input;
     using ShowerTimer.Core;
@@ -69,10 +66,10 @@
             TimeSpan currentTime = TimeSpan.Parse(this.Clock.Text);
 
             // match action and select in list
-            var playlist = this.ActiveProfile.Playlist.FirstOrDefault(x => x.TargetPlayTime.Equals(currentTime));
-            if (playlist != null)
+            var sequence = this.ActiveProfile.Playlist.FirstOrDefault(x => x.TargetPlayTime.Equals(currentTime));
+            if (sequence != null)
             {
-                var item = this.SequenceList.Items.Cast<IActionSequence>().FirstOrDefault(x => x.SequenceName == playlist.SequenceName);
+                var item = this.SequenceList.Items.Cast<IActionSequence>().FirstOrDefault(x => x.SequenceName == sequence.SequenceName);
                 if (item != null)
                 {
                     this.SequenceList.SelectedIndex = this.SequenceList.Items.IndexOf(item);
@@ -123,7 +120,7 @@
             // abort timer if we go negative 
             if (newTime.IsNegative())
             {
-                this.PauseActivity();
+                this.Timer.Stop();
                 return;
             }
 
