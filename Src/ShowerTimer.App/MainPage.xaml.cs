@@ -197,7 +197,6 @@
 
         private void SetGirlProfile()
         {
-            this.ProfileList.SelectedIndex = 1;
             this.SetProfile(new GirlProfile());
             new SpeechComponent().Speek("Girl profile selected.");
         }
